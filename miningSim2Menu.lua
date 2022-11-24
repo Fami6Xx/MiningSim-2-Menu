@@ -58,3 +58,42 @@ for i in pairs(v8("Eggs")) do object[eggsNum]=i eggsNum=eggsNum+1 end
 local eggDrop = Eggs:NewDropdown("Egg to open", "Selected egg to be opened by fast open", object, function(selected) 
     getgenv().selectedEgg = selected
 end)
+
+--TELEPORTING
+local Teleport = Window:NewTab("Teleport")
+local TelSec = Teleport:NewSection("World an Checkpoint")
+
+local worlds = {}
+local worldsNum = 1
+for i in pairs(v8("Worlds")) do worlds[worldsNum]=i worldsNum=worldsNum+1 end
+TelSec:NewDropdown("World to Teleport", "Select world to teleport", worlds, function(selected)
+    getgenv().selectedWorld = selected
+    getgenv().selectedCheckpoint = nil
+
+    generateCheckpoints(selected)
+end)
+
+local checkpointDropdown = TelSec:NewDropdown("Checkpoint to Teleport", "Select checkpoint, not required", {}, function(selected)
+    getgenv().selectedCheckpoint = selected
+end)
+
+function generateCheckpoints(world)
+    local checkpoints = {}
+    local checkpointsNum = 1
+    for i in pairs(v8("Worlds")[world].Layers) do
+        if v8("Worlds")[world].Layers[i].Checkpoint then
+            checkpoints[checkpointsNum] = v8("Worlds")[world].Layers[i].Checkpoint.Name
+            checkpointsNum = checkpointsNum + 1
+        end
+    end
+    checkpointDropdown:Refresh(checkpoints)
+end
+
+TelSec:NewButton("Teleport!", "Teleports to selected world and checkpoint", function()
+    if not getgenv().selectedWorld then return end
+    if not getgenv().selectedCheckpoint then
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(getgenv().selectedWorld)
+    else
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(getgenv().selectedCheckpoint)
+    end
+end)
