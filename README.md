@@ -3,6 +3,8 @@ Small but useful script for Mining Simulator 2
 
 Game: https://www.roblox.com/games/9551640993/
 
+Made for Synapse x
+
 ## Features
 - AutoMining
   - Automatically mines below you and searches for ores (Not optimized)
