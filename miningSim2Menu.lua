@@ -97,3 +97,17 @@ TelSec:NewButton("Teleport!", "Teleports to selected world and checkpoint", func
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(getgenv().selectedCheckpoint)
     end
 end)
+
+-- MINING
+local Mining = Window:NewTab("Mining")
+
+local AutoMine = Mining:NewSection("AutoMine")
+AutoMine:NewToggle("AutoMine", "Automines below you", function(state)
+ -- Autmining
+end)
+AutoMine:NewSlider("Mining pause", "Time between mining in ms (150ms is suggested)", 1000, 0, function(s)
+    getgenv().waitBetweenMining = s / 1000
+end)
+AutoMine:NewSlider("Search radius", "Radius in which algorithm will search for ores (5)", 10, 1, function(s)
+    getgenv().mineSearchRadius = s
+end)
